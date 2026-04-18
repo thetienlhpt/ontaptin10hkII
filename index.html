@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ôn tập KTCKII - Tin học 10</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 1. THE SETUP - LIGHT THEME (WHITE, PINK, YELLOW) */
+        :root {
+            --bg-main: #fff5f8;
+            --bg-slide: #ffffff;
+            --primary-pink: #ff4d6d;
+            --secondary-pink: #ffb3c6;
+            --accent-yellow: #ffca3a;
+            --text-dark: #2b2d42;
+            --glass: rgba(255, 77, 109, 0.05);
+            --correct-green: #2ecc71;
+            --wrong-red: #e63946;
+            --cute-blue: #00b4d8;
+            --cute-green: #8ac926;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px 0;
+            overflow-x: hidden;
+            color: var(--text-dark);
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: var(--bg-slide);
+            color: var(--text-dark);
+            font-family: 'Nunito', sans-serif;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.15);
+            display: flex;
+            flex-direction: column;
+            padding: 40px 60px;
+            margin-bottom: 30px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 202, 58, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 77, 109, 0.08) 0%, transparent 40%);
+            border: 2px solid var(--secondary-pink);
+        }
+
+        /* Tech Background Elements - Light */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, rgba(255,77,109,0.03) 1px, transparent 1px),
+                        linear-gradient(rgba(255,77,109,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .slide-container > * { z-index: 1; position: relative; }
+
+        /* Typography */
+        h1, h2 { font-family: 'Montserrat', sans-serif; margin: 0; text-transform: uppercase; }
+        h1 { font-size: 64px; color: var(--primary-pink); text-shadow: 3px 3px 0px rgba(255,202,58,0.6); text-align: center; line-height: 1.2; }
+        .slide-title { font-size: 32px; margin-bottom: 20px; border-left: 8px solid var(--accent-yellow); padding-left: 20px; letter-spacing: 2px; color: var(--primary-pink); }
+
+        /* Floating Animations for Title Slide */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        @keyframes float-reverse {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(20px) rotate(-10deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        
+        .decor-icon { position: absolute; opacity: 0.85; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1)); }
+        .anim-float { animation: float 4s ease-in-out infinite; }
+        .anim-float-rev { animation: float-reverse 5s ease-in-out infinite; }
+
+        /* Quiz Layouts - BIG FONTS */
+        .question-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0 50px;
+        }
+
+        .question-text { 
+            font-weight: 800; 
+            margin-bottom: 40px; 
+            font-size: 36px; 
+            color: var(--text-dark); 
+            text-align: center;
+            line-height: 1.4;
+        }
+        
+        .scenario-text {
+            font-weight: 600;
+            font-size: 24px;
+            text-align: justify;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            color: #4a4e69;
+            background: #fff9fa;
+            padding: 15px 25px;
+            border-left: 5px solid var(--primary-pink);
+            border-radius: 12px;
+            width: 100%;
+        }
+        
+        .options { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 25px; 
+            width: 100%;
+            max-width: 1100px;
+        }
+        
+        .option-btn {
+            background: #ffffff;
+            border: 3px solid var(--secondary-pink);
+            color: var(--text-dark);
+            padding: 20px 30px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 22px;
+            text-align: left;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            line-height: 1.4;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.05);
+        }
+
+        .option-btn:hover { 
+            background: var(--accent-yellow); 
+            color: #000; 
+            border-color: var(--accent-yellow); 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 20px rgba(255, 202, 58, 0.4); 
+        }
+        .option-btn.correct { background: var(--correct-green) !important; border-color: var(--correct-green) !important; color: white !important; }
+        .option-btn.wrong { background: var(--wrong-red) !important; border-color: var(--wrong-red) !important; color: white !important; }
+
+        /* Navigation Button */
+        .btn-next {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            background: var(--accent-yellow);
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            font-size: 22px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(255, 202, 58, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .btn-next:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 202, 58, 0.6);
+        }
+
+        /* Results / Summary */
+        .result-container {
+            text-align: center;
+            background: var(--glass);
+            padding: 50px;
+            border-radius: 24px;
+            border: 4px solid var(--accent-yellow);
+            width: 700px;
+            margin: auto;
+            background-color: #fff;
+            box-shadow: 0 15px 40px rgba(255, 77, 109, 0.15);
+        }
+
+        .score-big { font-size: 110px; font-family: 'Montserrat'; color: var(--primary-pink); text-shadow: 4px 4px 0px rgba(255,202,58,0.4); font-weight: 900; margin: 10px 0; }
+        .btn-restart {
+            margin-top: 30px;
+            padding: 18px 45px;
+            background: var(--primary-pink);
+            border: none;
+            color: white;
+            font-family: 'Montserrat';
+            font-size: 22px;
+            font-weight: 800;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .btn-restart:hover { background: #ff2a55; transform: scale(1.08); box-shadow: 0 15px 25px rgba(255, 77, 109, 0.4); }
+
+        /* True/False Styling */
+        .tf-grid { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 1100px; margin: 0 auto; }
+        .tf-row { display: grid; grid-template-columns: 3fr 1fr 1fr; gap: 15px; align-items: center; padding: 12px 20px; border-bottom: 2px dashed var(--secondary-pink); font-size: 24px; font-weight: 600; }
+        .tf-row .option-btn { padding: 12px; text-align: center; font-size: 24px; font-weight: 800; }
+        
+        .title-slide { justify-content: center; align-items: center; text-align: center; }
+        .title-slide p { font-size: 28px; margin-top: 15px; color: var(--text-dark); letter-spacing: 6px; font-weight: 800; }
+
+        .hidden { display: none !important; }
+
+        /* Input styling */
+        .input-info {
+            padding: 18px 25px; 
+            font-size: 20px; 
+            border-radius: 12px; 
+            border: 3px solid var(--primary-pink); 
+            background: #fff; 
+            color: #004080; /* Màu chữ xanh dương đậm khi gõ */
+            font-family: 'Nunito', sans-serif; 
+            font-weight: 700;
+            text-align: center; 
+            outline: none;
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.05);
+            transition: border-color 0.2s;
+        }
+        .input-info:focus { border-color: var(--accent-yellow); }
+        .input-info::placeholder { color: #b8c0cf; font-weight: 600; }
+
+    </style>
+</head>
+<body>
+
+<!-- Audio Elements -->
+<audio id="audio-correct" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
+<audio id="audio-wrong" src="https://assets.mixkit.co/active_storage/sfx/2020/2020-preview.mp3"></audio>
+<audio id="audio-finish" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
+
+<!-- Slide 1: Title_Slide with Cute Decorations -->
+<div class="slide-container title-slide" id="slide1">
+    <!-- Floating Cute Decor Icons -->
+    <i class="fa-solid fa-rocket decor-icon anim-float" style="color: var(--primary-pink); font-size: 70px; top: 12%; left: 12%;"></i>
+    <i class="fa-solid fa-star decor-icon anim-float-rev" style="color: var(--accent-yellow); font-size: 55px; top: 18%; right: 15%; animation-delay: 1s;"></i>
+    <i class="fa-solid fa-graduation-cap decor-icon anim-float" style="color: var(--cute-blue); font-size: 80px; bottom: 20%; left: 10%; animation-delay: 0.5s;"></i>
+    <i class="fa-solid fa-lightbulb decor-icon anim-float-rev" style="color: var(--accent-yellow); font-size: 65px; bottom: 25%; right: 12%; animation-delay: 1.5s;"></i>
+    <i class="fa-solid fa-heart decor-icon anim-float" style="color: var(--primary-pink); font-size: 45px; top: 45%; left: 5%; animation-delay: 0.8s;"></i>
+    <i class="fa-solid fa-laptop-code decor-icon anim-float-rev" style="color: var(--cute-green); font-size: 60px; top: 40%; right: 5%; animation-delay: 2.2s;"></i>
+
+    <h1 style="font-size: 60px;">ĐỀ CƯƠNG ÔN TẬP<br>KIỂM TRA CUỐI KỲ II</h1>
+    <p>TIN HỌC 10</p>
+    
+    <div style="margin-top: 15px; font-size: 24px; color: var(--text-dark); font-weight: 600;">
+        Giáo viên giảng dạy: <span style="color: var(--primary-pink); font-weight: 800; font-size: 28px;">Cô Nguyễn Tiên</span>
+    </div>
+    
+    <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 20px; align-items: center; z-index: 10;">
+        <div style="display: flex; flex-direction: row; gap: 25px; align-items: flex-end;">
+            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px;">
+                <label for="student-name" style="font-weight: 800; font-size: 22px; color: #004080; margin-left: 5px;"><i class="fa-solid fa-user-graduate"></i> Họ tên học sinh</label>
+                <input type="text" id="student-name" class="input-info" style="width: 400px;" placeholder="Nhập Họ và Tên..." required>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px;">
+                <label for="student-class" style="font-weight: 800; font-size: 22px; color: #004080; margin-left: 5px;"><i class="fa-solid fa-school"></i> Lớp</label>
+                <input type="text" id="student-class" class="input-info" style="width: 180px;" placeholder="VD: 10A1" required>
+            </div>
+        </div>
+        <button class="btn-restart" style="margin-top: 10px; background: var(--accent-yellow); color: #000;" onclick="startQuiz()">BẮT ĐẦU ÔN TẬP</button>
+    </div>
+</div>
+
+<!-- ======================= TRẮC NGHIỆM (30 CÂU) ======================= -->
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 1. GIMP là viết tắt của từ gì?</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, true)">A. GNU Image Manipulation Program.</button>
+            <button class="option-btn" onclick="answer(this, false)">B. Graphical Image Manipulation Program.</button>
+            <button class="option-btn" onclick="answer(this, false)">C. General Image Manipulation Program.</button>
+            <button class="option-btn" onclick="answer(this, false)">D. Global Image Manipulation Program.</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 2. Bảng chứa các công cụ thiết kế và chỉnh sửa như: tạo văn bản, chọn, cắt, xóa, vẽ, tô màu và biến đổi hình. Đó là?</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, true)">A. Toolbox</button>
+            <button class="option-btn" onclick="answer(this, false)">B. Select</button>
+            <button class="option-btn" onclick="answer(this, false)">C. Star</button>
+            <button class="option-btn" onclick="answer(this, false)">D. File</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 3. Khi làm việc với nhiều lớp ảnh trong GIMP, bạn có thể:</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. Gộp ảnh lại thành một hình duy nhất.</button>
+            <button class="option-btn" onclick="answer(this, true)">B. Ẩn, hiển thị, đổi tên từng lớp ảnh.</button>
+            <button class="option-btn" onclick="answer(this, false)">C. Xóa ảnh gốc hoàn toàn.</button>
+            <button class="option-btn" onclick="answer(this, false)">D. Tô màu tất cả lớp ảnh cùng lúc.</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 4. Để tạo tệp ảnh mới ta dùng lệnh nào?</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. File -> Open</button>
+            <button class="option-btn" onclick="answer(this, false)">B. File Save</button>
+            <button class="option-btn" onclick="answer(this, true)">C. File -> New</button>
+            <button class="option-btn" onclick="answer(this, false)">D. File -> Exit</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 5. Phần mềm GIMP để tô màu cho đối tượng ta có mấy cách cơ bản?</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, true)">A. 2</button>
+            <button class="option-btn" onclick="answer(this, false)">B. 3</button>
+            <button class="option-btn" onclick="answer(this, false)">C. 4</button>
+            <button class="option-btn" onclick="answer(this, false)">D. 5</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 6. Cách tô màu cho đối tượng bằng cách phủ một màu duy nhất lên bề mặt đối tượng. GIMP gọi đó là?</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. Tô màu bình thường</button>
+            <button class="option-btn" onclick="answer(this, false)">B. Tô màu đối tượng</button>
+            <button class="option-btn" onclick="answer(this, false)">C. Tô màu Gradient</button>
+            <button class="option-btn" onclick="answer(this, true)">D. Tô màu thuần nhất</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 7. Cách tô màu cho đối tượng bằng cách phủ lên bề mặt đối tượng một dải màu chuyển dần từ màu thứ nhất sang màu thứ hai. Đó gọi là?</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. Tô màu thuần nhất</button>
+            <button class="option-btn" onclick="answer(this, false)">B. Tô màu đối tượng</button>
+            <button class="option-btn" onclick="answer(this, true)">C. Tô màu Gradient</button>
+            <button class="option-btn" onclick="answer(this, false)">D. Tô màu Pattern</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 8. Phần mềm GIMP sử dụng công cụ nào để tạo văn bản?</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, true)">A. Text Tool</button>
+            <button class="option-btn" onclick="answer(this, false)">B. Scale</button>
+            <button class="option-btn" onclick="answer(this, false)">C. Move Tool</button>
+            <button class="option-btn" onclick="answer(this, false)">D. Select</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 9. Phần mềm GIMP sử dụng công cụ nào để di chuyển đối tượng được chọn?</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. Rotate</button>
+            <button class="option-btn" onclick="answer(this, false)">B. Scale</button>
+            <button class="option-btn" onclick="answer(this, true)">C. Move Tool</button>
+            <button class="option-btn" onclick="answer(this, false)">D. Rectangle Select</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 10. Phần mềm GIMP sử dụng công cụ nào để thay đổi kích thước đối tượng được chọn?</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. Rotate</button>
+            <button class="option-btn" onclick="answer(this, true)">B. Scale</button>
+            <button class="option-btn" onclick="answer(this, false)">C. Select</button>
+            <button class="option-btn" onclick="answer(this, false)">D. Rectangle Select</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 11. Có thể mở một hoặc nhiều tệp ảnh trong GIMP, Ta dùng lệnh?</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, true)">A. File -> Open</button>
+            <button class="option-btn" onclick="answer(this, false)">B. File Save</button>
+            <button class="option-btn" onclick="answer(this, false)">C. File Close</button>
+            <button class="option-btn" onclick="answer(this, false)">D. File Close View</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 12. Để xuất một bức ảnh sang định dạng .jpg trong GIMP, em cần chọn lệnh nào?</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. File Save As.</button>
+            <button class="option-btn" onclick="answer(this, false)">B. File Export.</button>
+            <button class="option-btn" onclick="answer(this, true)">C. File Export As</button>
+            <button class="option-btn" onclick="answer(this, false)">D. File Close.</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 13. Một bạn học sinh tạo một thiệp chúc mừng bằng GIMP... Bạn nên khuyên bạn ấy lưu tệp dưới định dạng nào?</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, true)">A. .xcf</button>
+            <button class="option-btn" onclick="answer(this, false)">B. .docx</button>
+            <button class="option-btn" onclick="answer(this, false)">C. .jpg</button>
+            <button class="option-btn" onclick="answer(this, false)">D. .psd</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 14. GIMP là phần mềm:</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, true)">A. Xử lí ảnh.</button>
+            <button class="option-btn" onclick="answer(this, false)">B. Soạn thảo văn bản.</button>
+            <button class="option-btn" onclick="answer(this, false)">C. Trình chiếu, thuyết trình.</button>
+            <button class="option-btn" onclick="answer(this, false)">D. Nghe nhạc.</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 15. Để tạo tệp ảnh mới ta chọn:</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. File/ Save</button>
+            <button class="option-btn" onclick="answer(this, true)">B. File New</button>
+            <button class="option-btn" onclick="answer(this, false)">C. File/ Open</button>
+            <button class="option-btn" onclick="answer(this, false)">D. File/Exit</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text" style="margin-bottom: 20px;">Câu 16. Một ảnh mới được tạo ra theo hình dưới đây có kích thước bao nhiêu?</div>
+        <div style="margin-bottom: 25px; width: 100%; display: flex; justify-content: center;">
+            <img src="image_8ea1ca.png" alt="Hình ảnh câu 16" style="border-radius: 12px; border: 3px solid var(--primary-pink); max-height: 320px; box-shadow: 0 4px 10px rgba(255, 77, 109, 0.1);" onerror="this.src='https://placehold.co/600x300/fff0f3/ff4d6d?text=Lỗi+hiển+thị+ảnh+(image_8ea1ca.png)'">
+        </div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. 300 x 300</button>
+            <button class="option-btn" onclick="answer(this, false)">B. 300 x 487</button>
+            <button class="option-btn" onclick="answer(this, false)">C. 324 x 300</button>
+            <button class="option-btn" onclick="answer(this, true)">D. 324 x 432</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 17. Để di chuyển ảnh đến vị trí phù hợp ta chọn công cụ:</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. Công cụ Crop.</button>
+            <button class="option-btn" onclick="answer(this, false)">B. Công cụ Text A</button>
+            <button class="option-btn" onclick="answer(this, false)">C. Công cụ Transform</button>
+            <button class="option-btn" onclick="answer(this, true)">D. Công cụ Move</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 18. Để mở một hoặc nhiều tệp ảnh trong GIMP ta chọn:</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. File Export As</button>
+            <button class="option-btn" onclick="answer(this, false)">B. File New</button>
+            <button class="option-btn" onclick="answer(this, true)">C. File Open</button>
+            <button class="option-btn" onclick="answer(this, false)">D. File Exit</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 19. Cùng với lớp (Layer), chúng tạo thành một đối tượng hợp nhất nên khó chỉnh sửa từng đối tượng. Do đó, mỗi đối tượng nên được?</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, true)">A. Tạo trên một lớp riêng</button>
+            <button class="option-btn" onclick="answer(this, false)">B. Xóa khi thêm đối tượng mới</button>
+            <button class="option-btn" onclick="answer(this, false)">C. Ẩn</button>
+            <button class="option-btn" onclick="answer(this, false)">D. Thay đổi vị trí</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 20. Bên trái tên lớp có biểu tượng hình con mắt. Nháy chuột vào con mắt có tác dụng gì?</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. Xóa lớp ảnh.</button>
+            <button class="option-btn" onclick="answer(this, false)">B. Nhân đôi lớp ảnh.</button>
+            <button class="option-btn" onclick="answer(this, false)">C. Di chuyển lớp ảnh.</button>
+            <button class="option-btn" onclick="answer(this, true)">D. Để ẩn (hoặc hiện) lớp</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 21. Khi ta đã xác định vùng chọn rồi nhấn phím Delete, có tác dụng gì?</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. Di chuyển vùng chọn.</button>
+            <button class="option-btn" onclick="answer(this, false)">B. tô đen vùng chọn.</button>
+            <button class="option-btn" onclick="answer(this, true)">C. xóa vùng chọn.</button>
+            <button class="option-btn" onclick="answer(this, false)">D. cho giản vùng chọn</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text" style="margin-bottom: 15px;">Câu 22. Trong hình dưới đây có tất cả bao nhiêu lớp?</div>
+        
+        <!-- Hình ảnh bảng Layers mô phỏng -->
+        <div style="margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; width: 100%;">
+            <div style="background: #2b2b2b; color: #fff; border-radius: 8px; border: 3px solid var(--primary-pink); padding: 10px; width: 280px; text-align: left; box-shadow: 0 4px 10px rgba(255, 77, 109, 0.1); font-family: 'Nunito', sans-serif;">
+                <div style="padding: 10px; border-bottom: 1px solid #444; display: flex; align-items: center; gap: 12px; font-size: 20px;"><i class="fa-solid fa-eye" style="color: #aaa;"></i> <i class="fa-regular fa-image"></i> Vòng 2</div>
+                <div style="padding: 10px; border-bottom: 1px solid #444; display: flex; align-items: center; gap: 12px; font-size: 20px;"><i class="fa-solid fa-eye" style="color: #aaa;"></i> <i class="fa-regular fa-image"></i> Vòng 1</div>
+                <div style="padding: 10px; border-bottom: 1px solid #444; display: flex; align-items: center; gap: 12px; font-size: 20px;"><i class="fa-solid fa-eye" style="color: #aaa;"></i> <i class="fa-regular fa-image"></i> Nen</div>
+                <div style="padding: 10px; display: flex; align-items: center; gap: 12px; font-size: 20px;"><i class="fa-solid fa-eye" style="color: #aaa;"></i> <i class="fa-regular fa-image"></i> Background</div>
+            </div>
+            <div style="font-size: 18px; font-weight: 600; color: var(--text-dark); margin-top: 15px; background: var(--bg-main); padding: 5px 15px; border-radius: 20px;">Hình 7. Bảng Layers</div>
+        </div>
+
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. 1</button>
+            <button class="option-btn" onclick="answer(this, false)">B. 3</button>
+            <button class="option-btn" onclick="answer(this, true)">C. 4</button>
+            <button class="option-btn" onclick="answer(this, false)">D. 5</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 23. Để bỏ vùng chọn ta dùng lệnh ?</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, true)">A. Select None</button>
+            <button class="option-btn" onclick="answer(this, false)">B. Select Invert</button>
+            <button class="option-btn" onclick="answer(this, false)">C. Edit Shrink</button>
+            <button class="option-btn" onclick="answer(this, false)">D. Edit Grown</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text" style="margin-bottom: 20px;">Câu 24. Sắp xếp các bước để tạo đường viền cho hình tròn:</div>
+        <div class="scenario-text" style="font-size: 22px; width: 100%;">
+            <div style="margin-bottom: 10px;"><b>Bước 1.</b> Co (Thu nhỏ - Shrink) vùng chọn với số centimet (hay pixel) bằng độ dày của đường viền cần tạo.</div>
+            <div style="margin-bottom: 10px;"><b>Bước 2.</b> Trên lớp vừa tạo, tô màu cho vùng chọn.</div>
+            <div style="margin-bottom: 10px;"><b>Bước 3.</b> Xóa (Delete) sau khi co để bỏ vùng chọn.</div>
+            <div><b>Bước 4.</b> Trên lớp (layer) mới xác định một vùng chọn hình tròn.</div>
+        </div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, true)">A. 4-2-1-3</button>
+            <button class="option-btn" onclick="answer(this, false)">B. 2-1-3-4</button>
+            <button class="option-btn" onclick="answer(this, false)">C. 3-2-1-4</button>
+            <button class="option-btn" onclick="answer(this, false)">D. 1-2-3-4</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 25. Để tạo đường viền cho hình tròn đồng tâm, ta dùng lệnh</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. Select None</button>
+            <button class="option-btn" onclick="answer(this, false)">B. Select Invert</button>
+            <button class="option-btn" onclick="answer(this, true)">C. Select Border</button>
+            <button class="option-btn" onclick="answer(this, false)">D. Select Float</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 26. Khi đang làm việc với nhiều lớp, bạn muốn tạm thời ẩn một lớp để xem kết quả thiết kế bên dưới. Bạn sẽ:</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. Nhấn Ctrl + H</button>
+            <button class="option-btn" onclick="answer(this, true)">B. Nhấn vào biểu tượng hình con mắt cạnh lớp đó</button>
+            <button class="option-btn" onclick="answer(this, false)">C. Xoá lớp đó đi</button>
+            <button class="option-btn" onclick="answer(this, false)">D. Kéo lớp đó xuống dưới cùng</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 27. Bạn cần tạo một thiết kế gồm: nền màu, ảnh người, và chữ. Trình tự thao tác đúng là:</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. Tạo lớp chữ -> Dán ảnh người -> Tô nền.</button>
+            <button class="option-btn" onclick="answer(this, true)">B. Tô nền -> Dán ảnh người -> Thêm chữ trên lớp mới.</button>
+            <button class="option-btn" onclick="answer(this, false)">C. Dán ảnh người -> Tạo chữ -> Tô nền.</button>
+            <button class="option-btn" onclick="answer(this, false)">D. Tạo lớp chữ -> Tô nền -> Dán ảnh người.</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 28. Trong quá trình thiết kế, bạn thấy lớp ảnh văn bản bị che khuất bởi ảnh nền. Để văn bản hiển thị rõ ràng, bạn cần:</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. Xoá lớp nền.</button>
+            <button class="option-btn" onclick="answer(this, false)">B. Giảm độ trong suốt (Opacity) của lớp văn bản.</button>
+            <button class="option-btn" onclick="answer(this, true)">C. Di chuyển lớp văn bản lên trên cùng trong bảng lớp.</button>
+            <button class="option-btn" onclick="answer(this, false)">D. Ẩn lớp nền.</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 29. Bạn đang thiết kế một tấm thiệp mời. Sau khi hoàn tất các lớp ảnh, bạn muốn lưu file để lần sau chỉnh sửa tiếp. Định dạng lưu phù hợp là:</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, false)">A. .jpg</button>
+            <button class="option-btn" onclick="answer(this, false)">B. .docx</button>
+            <button class="option-btn" onclick="answer(this, true)">C. .xcf</button>
+            <button class="option-btn" onclick="answer(this, false)">D. .pdf</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN 1. TRẮC NGHIỆM</h2>
+    <div class="question-content">
+        <div class="question-text">Câu 30. Công dụng phần mềm GIMP là gì?</div>
+        <div class="options">
+            <button class="option-btn" onclick="answer(this, true)">A. Một phần mềm thiết kế, chỉnh sửa đồ họa.</button>
+            <button class="option-btn" onclick="answer(this, false)">B. Một phần mềm soạn thảo văn bản.</button>
+            <button class="option-btn" onclick="answer(this, false)">C. Một phần mềm đa năng.</button>
+            <button class="option-btn" onclick="answer(this, false)">D. Một phần mềm tính toán.</button>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<!-- ======================= ĐÚNG SAI (4 CÂU) ======================= -->
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN II. ĐÚNG / SAI</h2>
+    <div class="question-content">
+        <div class="question-text" style="margin-bottom: 20px;">Câu 31. Khẳng định nào sau đây là đúng/sai với GIMP?</div>
+        <div class="tf-grid">
+            <div class="tf-row" style="font-weight: 800; color: var(--primary-pink); border-bottom: 3px solid var(--primary-pink);">
+                <div>Khẳng định</div><div style="text-align: center;">Đúng</div><div style="text-align: center;">Sai</div>
+            </div>
+            <div class="tf-row">
+                <div>a) Phần mềm GIMP có thể dùng để chỉnh sửa ảnh.</div>
+                <button class="option-btn" onclick="answer(this, true)">Đ</button>
+                <button class="option-btn" onclick="answer(this, false)">S</button>
+            </div>
+            <div class="tf-row">
+                <div>b) Phần mềm GIMP không thể ghép ảnh.</div>
+                <button class="option-btn" onclick="answer(this, false)">Đ</button>
+                <button class="option-btn" onclick="answer(this, true)">S</button>
+            </div>
+            <div class="tf-row">
+                <div>c) Cung cấp các công cụ tạo văn bản, tô màu.</div>
+                <button class="option-btn" onclick="answer(this, true)">Đ</button>
+                <button class="option-btn" onclick="answer(this, false)">S</button>
+            </div>
+            <div class="tf-row">
+                <div>d) Là phần mềm thiết kế đồ họa.</div>
+                <button class="option-btn" onclick="answer(this, true)">Đ</button>
+                <button class="option-btn" onclick="answer(this, false)">S</button>
+            </div>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN II. ĐÚNG / SAI</h2>
+    <div class="question-content">
+        <div class="scenario-text">
+            <b>Câu 32.</b> Minh thiết kế thiệp chúc mừng bằng phần mềm GIMP. Sau khi mở một tệp ảnh mới, bạn ấy chèn hình nền, tạo vùng bánh sinh nhật. Minh đổi màu nền và lưu lại ảnh.
+        </div>
+        <div class="tf-grid">
+            <div class="tf-row" style="font-weight: 800; color: var(--primary-pink); border-bottom: 3px solid var(--primary-pink);">
+                <div>Khẳng định</div><div style="text-align: center;">Đúng</div><div style="text-align: center;">Sai</div>
+            </div>
+            <div class="tf-row">
+                <div>a) Công cụ văn bản có biểu tượng chữ A trong hộp công cụ.</div>
+                <button class="option-btn" onclick="answer(this, true)">Đ</button>
+                <button class="option-btn" onclick="answer(this, false)">S</button>
+            </div>
+            <div class="tf-row">
+                <div>b) Để chèn thêm ảnh nhật vào thiệp, Minh cần tạo một lớp mới chứa hình ảnh đó.</div>
+                <button class="option-btn" onclick="answer(this, true)">Đ</button>
+                <button class="option-btn" onclick="answer(this, false)">S</button>
+            </div>
+            <div class="tf-row">
+                <div>c) Khi chưa tạo vùng chọn thì toàn bộ lớp có thể bị tô cùng màu.</div>
+                <button class="option-btn" onclick="answer(this, true)">Đ</button>
+                <button class="option-btn" onclick="answer(this, false)">S</button>
+            </div>
+            <div class="tf-row">
+                <div>d) Sau khi hoàn thành, nếu Minh chỉ bấm “Save” thì tệp ảnh sẽ luôn được lưu dưới dạng .jpg hoặc .png.</div>
+                <button class="option-btn" onclick="answer(this, false)">Đ</button>
+                <button class="option-btn" onclick="answer(this, true)">S</button>
+            </div>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN II. ĐÚNG / SAI</h2>
+    <div class="question-content">
+        <div class="scenario-text">
+            <b>Câu 33.</b> Lính sử dụng GIMP để thiết kế một bưu thiếp du lịch. Bạn ấy mỡ một ảnh phong cảnh, tạo một vùng chọn hình chữ nhật ở giữa để thêm lời chào “Chào từ Đà Lạt!”. Sau đó, Linh muốn di chuyển khung chữ sang góc phải và làm mờ nền ảnh.
+        </div>
+        <div class="tf-grid">
+            <div class="tf-row" style="font-weight: 800; color: var(--primary-pink); border-bottom: 3px solid var(--primary-pink);">
+                <div>Khẳng định</div><div style="text-align: center;">Đúng</div><div style="text-align: center;">Sai</div>
+            </div>
+            <div class="tf-row">
+                <div>a) Công cụ Rectangular Select Tool giúp Linh tạo vùng chọn hình chữ nhật.</div>
+                <button class="option-btn" onclick="answer(this, true)">Đ</button>
+                <button class="option-btn" onclick="answer(this, false)">S</button>
+            </div>
+            <div class="tf-row">
+                <div>b) Khi muốn thêm chữ, Linh phải chọn vùng chọn trước thì mới gõ được văn bản.</div>
+                <button class="option-btn" onclick="answer(this, false)">Đ</button>
+                <button class="option-btn" onclick="answer(this, true)">S</button>
+            </div>
+            <div class="tf-row">
+                <div>c) Để di chuyển vùng chữ sang góc phải. Linh cần chọn đúng lớp chứa chữ và dùng công cụ Move Tool.</div>
+                <button class="option-btn" onclick="answer(this, true)">Đ</button>
+                <button class="option-btn" onclick="answer(this, false)">S</button>
+            </div>
+            <div class="tf-row">
+                <div>d) Linh có thể tô màu nền hiệu ứng Gardient cho tấm bưu thiếp của minh.</div>
+                <button class="option-btn" onclick="answer(this, true)">Đ</button>
+                <button class="option-btn" onclick="answer(this, false)">S</button>
+            </div>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<div class="slide-container question-slide hidden">
+    <h2 class="slide-title">PHẦN II. ĐÚNG / SAI</h2>
+    <div class="question-content">
+        <div class="scenario-text">
+            <b>Câu 34.</b> Mai đang thiết kế poster tuyên truyền CLB Sách và Hành động. Mai tạo vùng chọn elip để làm khung viền cho tên CLB, sử dụng công cụ Ellipse Select Tool và tô viền bằng màu vàng. Sau đó, Mai tạo một lớp mới để thêm ảnh cuốn sách vào góc phải tấm hình.
+        </div>
+        <div class="tf-grid">
+            <div class="tf-row" style="font-weight: 800; color: var(--primary-pink); border-bottom: 3px solid var(--primary-pink);">
+                <div>Khẳng định</div><div style="text-align: center;">Đúng</div><div style="text-align: center;">Sai</div>
+            </div>
+            <div class="tf-row">
+                <div>a) Ellipse Select Tool giúp chọn vùng hình tròn hoặc hình elip.</div>
+                <button class="option-btn" onclick="answer(this, true)">Đ</button>
+                <button class="option-btn" onclick="answer(this, false)">S</button>
+            </div>
+            <div class="tf-row">
+                <div>b) Tạo vùng chọn rồi tô màu giúp người dùng kiểm soát chính xác khu vực được tô.</div>
+                <button class="option-btn" onclick="answer(this, true)">Đ</button>
+                <button class="option-btn" onclick="answer(this, false)">S</button>
+            </div>
+            <div class="tf-row">
+                <div>c) Nếu Mai chèn hình ảnh cuốn sách vào cùng lớp với nền, cô ấy vẫn có thể di chuyển hình ảnh một cách độc lập.</div>
+                <button class="option-btn" onclick="answer(this, false)">Đ</button>
+                <button class="option-btn" onclick="answer(this, true)">S</button>
+            </div>
+            <div class="tf-row">
+                <div>d) Mai có thể tạo thêm lớp để sắp xếp riêng biệt hình ảnh, chữ và khung nền nhằm dễ chỉnh sửa về sau.</div>
+                <button class="option-btn" onclick="answer(this, true)">Đ</button>
+                <button class="option-btn" onclick="answer(this, false)">S</button>
+            </div>
+        </div>
+    </div>
+    <button class="btn-next" onclick="nextSlide()">XEM KẾT QUẢ <i class="fa-solid fa-flag-checkered"></i></button>
+</div>
+
+<!-- ======================= SUMMARY ======================= -->
+
+<div class="slide-container summary-slide hidden" id="slide-summary">
+    <h2 class="slide-title">TỔNG KẾT KẾT QUẢ</h2>
+    <div class="result-container">
+        <div style="font-size: 26px; color: var(--text-dark); margin-bottom: 15px; font-weight: 700;">Học sinh: <b id="display-name" style="color: var(--primary-pink);">---</b> | Lớp: <b id="display-class" style="color: var(--primary-pink);">---</b></div>
+        <div style="font-size: 28px; margin-bottom: 20px; color: var(--text-dark); font-weight: 700;">Điểm của bạn:</div>
+        <div class="score-big" id="final-score">0</div>
+        <div id="feedback-message" style="font-size: 26px; font-weight: 800; margin-top: 10px; margin-bottom: 20px; font-style: italic;"></div>
+        <div style="display: flex; justify-content: space-around; margin-top: 30px; font-size: 26px; color: var(--text-dark); font-weight: 800;">
+            <div><i class="fa-solid fa-check" style="color:var(--correct-green)"></i> Đúng: <span id="correct-count">0</span></div>
+            <div><i class="fa-solid fa-xmark" style="color:var(--wrong-red)"></i> Sai: <span id="wrong-count">0</span></div>
+        </div>
+        <button class="btn-restart" onclick="restartQuiz()">LÀM LẠI BÀI TẬP</button>
+    </div>
+</div>
+
+<div class="fireworks" id="fireworks-layer" style="position: fixed; pointer-events: none; z-index: 9999;"></div>
+
+<script>
+    let correctTotal = 0;
+    let wrongTotal = 0;
+    let currentSlideIndex = 0;
+    let allSlides = [];
+    let fireworksInterval = null;
+    let isFirstRun = true;
+
+    // Hàm xáo trộn mảng (Fisher-Yates)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    // Hàm cập nhật nút Next
+    function updateNextButtons() {
+        const qSlides = document.querySelectorAll('.question-slide');
+        qSlides.forEach((slide, index) => {
+            const btn = slide.querySelector('.btn-next');
+            if(btn) {
+                if (index === qSlides.length - 1) {
+                    btn.innerHTML = 'XEM KẾT QUẢ <i class="fa-solid fa-flag-checkered"></i>';
+                } else {
+                    btn.innerHTML = 'CÂU TIẾP THEO <i class="fa-solid fa-arrow-right"></i>';
+                }
+            }
+        });
+    }
+
+    // Hàm xáo trộn câu hỏi và đáp án trên DOM
+    function shuffleQuizDOM() {
+        // 1. Hoán đổi vị trí các đáp án trong câu hỏi trắc nghiệm
+        document.querySelectorAll('.options').forEach(optionsContainer => {
+            let btns = Array.from(optionsContainer.querySelectorAll('.option-btn'));
+            shuffleArray(btns);
+            btns.forEach(btn => optionsContainer.appendChild(btn));
+        });
+
+        // 2. Hoán đổi các ý (a,b,c,d) trong câu hỏi Đúng/Sai
+        document.querySelectorAll('.tf-grid').forEach(grid => {
+            let rows = Array.from(grid.querySelectorAll('.tf-row'));
+            if(rows.length > 0) {
+                let header = rows.shift(); // Tách dòng tiêu đề ra
+                shuffleArray(rows);
+                grid.innerHTML = ''; 
+                grid.appendChild(header); // Đưa tiêu đề vào lại
+                rows.forEach(row => grid.appendChild(row)); // Đưa các dòng đã trộn vào
+            }
+        });
+
+        // 3. Hoán đổi thứ tự các slide câu hỏi
+        const summarySlide = document.getElementById('slide-summary');
+        let mcSlides = Array.from(document.querySelectorAll('.question-slide')).filter(s => s.querySelector('.options'));
+        let tfSlides = Array.from(document.querySelectorAll('.question-slide')).filter(s => s.querySelector('.tf-grid'));
+
+        shuffleArray(mcSlides);
+        shuffleArray(tfSlides);
+
+        // 4. Đánh lại số thứ tự câu hỏi (từ 1 đến 34)
+        let qNum = 1;
+        
+        const updateQNum = (slide, num) => {
+            let textEl = slide.querySelector('.question-text');
+            if (textEl && textEl.innerHTML.includes('Câu')) {
+                textEl.innerHTML = textEl.innerHTML.replace(/Câu \d+\./, `Câu ${num}.`);
+            } else {
+                let boldEl = slide.querySelector('.scenario-text b');
+                if(boldEl) boldEl.innerHTML = boldEl.innerHTML.replace(/Câu \d+\./, `Câu ${num}.`);
+            }
+        };
+
+        mcSlides.forEach(slide => {
+            updateQNum(slide, qNum++);
+            summarySlide.parentNode.insertBefore(slide, summarySlide);
+        });
+
+        tfSlides.forEach(slide => {
+            updateQNum(slide, qNum++);
+            summarySlide.parentNode.insertBefore(slide, summarySlide);
+        });
+
+        // Cập nhật lại mảng slides sau khi cấu trúc HTML thay đổi
+        allSlides = Array.from(document.querySelectorAll('.question-slide, .summary-slide'));
+        updateNextButtons();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        // Lấy danh sách slide gốc ban đầu
+        allSlides = Array.from(document.querySelectorAll('.question-slide, .summary-slide'));
+        
+        // Loại bỏ A, B, C, D tĩnh một lần duy nhất lúc tải trang
+        document.querySelectorAll('.options .option-btn').forEach(btn => {
+            btn.innerHTML = btn.innerHTML.replace(/^[A-D]\.\s*/, '');
+        });
+        
+        updateNextButtons();
+    });
+
+    function startQuiz() {
+        const name = document.getElementById('student-name').value.trim();
+        const className = document.getElementById('student-class').value.trim();
+        
+        if (!name || !className) {
+            alert("Vui lòng nhập đầy đủ Họ tên và Lớp trước khi bắt đầu!");
+            return;
+        }
+
+        document.getElementById('display-name').innerText = name;
+        document.getElementById('display-class').innerText = className;
+
+        // Chỉ xáo trộn từ lần làm lại thứ 2 trở đi
+        if (!isFirstRun) {
+            shuffleQuizDOM();
+        }
+        isFirstRun = false;
+
+        // Hide title slide, show first question
+        document.getElementById('slide1').classList.add('hidden');
+        currentSlideIndex = 0;
+        allSlides[currentSlideIndex].classList.remove('hidden');
+        
+        window.scrollTo(0, 0);
+    }
+
+    function answer(btn, isCorrect) {
+        if (btn.classList.contains('correct') || btn.classList.contains('wrong')) return;
+
+        // Khóa các nút
+        const optionsContainer = btn.closest('.options');
+        if (optionsContainer) {
+            const allBtns = optionsContainer.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.style.pointerEvents = 'none');
+        } else {
+            const rowContainer = btn.closest('.tf-row');
+            const rowBtns = rowContainer.querySelectorAll('.option-btn');
+            rowBtns.forEach(b => b.style.pointerEvents = 'none');
+        }
+
+        const correctAudio = document.getElementById('audio-correct');
+        const wrongAudio = document.getElementById('audio-wrong');
+        const fireworks = document.getElementById('fireworks-layer');
+
+        if (isCorrect) {
+            btn.classList.add('correct');
+            correctAudio.currentTime = 0;
+            correctAudio.play();
+            correctTotal++;
+            
+            // Random sao
+            let starsHTML = '';
+            const colors = ['#ffca3a', '#ff4d6d', '#ffb3c6', '#8ac926'];
+            for(let i = 0; i < 12; i++) {
+                const top = Math.random() * 90;
+                const left = Math.random() * 90;
+                const size = Math.random() * 40 + 20;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                starsHTML += `<i class="fa-solid fa-star" style="position:absolute; top:${top}%; left:${left}%; color: ${color}; font-size: ${size}px; animation: scaleUp 0.3s ease-in-out;"></i>`;
+            }
+            fireworks.innerHTML = starsHTML;
+            
+            fireworks.style.display = 'block';
+            setTimeout(() => { if (!fireworksInterval) fireworks.style.display = 'none'; }, 1000);
+        } else {
+            btn.classList.add('wrong');
+            wrongAudio.currentTime = 0;
+            wrongAudio.play();
+            wrongTotal++;
+        }
+        updateSummary();
+    }
+
+    function nextSlide() {
+        allSlides[currentSlideIndex].classList.add('hidden');
+        currentSlideIndex++;
+        
+        if (currentSlideIndex < allSlides.length) {
+            allSlides[currentSlideIndex].classList.remove('hidden');
+            
+            // Trang tổng kết
+            if (currentSlideIndex === allSlides.length - 1) {
+                startContinuousFireworks();
+                const finishAudio = document.getElementById('audio-finish');
+                finishAudio.currentTime = 0;
+                finishAudio.play().catch(e => console.log('Audio error:', e));
+            }
+        }
+    }
+
+    function startContinuousFireworks() {
+        const fireworks = document.getElementById('fireworks-layer');
+        fireworks.style.display = 'block';
+        
+        fireworksInterval = setInterval(() => {
+            let starsHTML = '';
+            const colors = ['#ffca3a', '#ff4d6d', '#ffb3c6', '#8ac926'];
+            for(let i = 0; i < 8; i++) {
+                const top = Math.random() * 90;
+                const left = Math.random() * 90;
+                const size = Math.random() * 40 + 20;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                starsHTML += `<i class="fa-solid fa-star" style="position:absolute; top:${top}%; left:${left}%; color: ${color}; font-size: ${size}px; transition: all 0.3s;"></i>`;
+            }
+            fireworks.innerHTML = starsHTML;
+        }, 400);
+    }
+
+    function updateSummary() {
+        document.getElementById('correct-count').innerText = correctTotal;
+        document.getElementById('wrong-count').innerText = wrongTotal;
+        document.getElementById('final-score').innerText = correctTotal * 10;
+        
+        // Nhận xét
+        const feedbackEl = document.getElementById('feedback-message');
+        const totalQuestions = 34; 
+        const percentage = (correctTotal / totalQuestions) * 100;
+        
+        if (percentage === 100) {
+            feedbackEl.innerText = "🎉 Xuất sắc! Em đã nắm vững hoàn toàn kiến thức.";
+            feedbackEl.style.color = "var(--correct-green)";
+        } else if (percentage >= 80) {
+            feedbackEl.innerText = "🌟 Rất tốt! Kiến thức của em rất vững vàng.";
+            feedbackEl.style.color = "#ffaa00";
+        } else if (percentage >= 65) {
+            feedbackEl.innerText = "👍 Khá tốt! Em hãy xem lại một vài câu bị sai nhé.";
+            feedbackEl.style.color = "var(--cute-blue)"; 
+        } else if (percentage >= 50) {
+            feedbackEl.innerText = "📚 Đạt yêu cầu. Em cần cố gắng ôn tập kỹ hơn nữa.";
+            feedbackEl.style.color = "orange"; 
+        } else {
+            feedbackEl.innerText = "⚠️ Chưa đạt! Em cần xem lại đề cương và làm lại bài thật cẩn thận.";
+            feedbackEl.style.color = "var(--wrong-red)"; 
+        }
+    }
+
+    function restartQuiz() {
+        correctTotal = 0;
+        wrongTotal = 0;
+        updateSummary();
+        
+        if (fireworksInterval) {
+            clearInterval(fireworksInterval);
+            fireworksInterval = null;
+        }
+        document.getElementById('fireworks-layer').style.display = 'none';
+        
+        const finishAudio = document.getElementById('audio-finish');
+        finishAudio.pause();
+        finishAudio.currentTime = 0;
+        
+        // Khôi phục nút
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.classList.remove('correct', 'wrong');
+            btn.style.pointerEvents = 'auto'; 
+        });
+        
+        allSlides.forEach(slide => slide.classList.add('hidden'));
+        document.getElementById('slide1').classList.remove('hidden');
+        
+        window.scrollTo(0, 0);
+    }
+</script>
+
+</body>
+</html>
+```
